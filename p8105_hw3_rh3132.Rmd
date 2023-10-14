@@ -310,21 +310,32 @@ The smoothed lines provide a clear visualization of the general trend in total a
 
 
 ```{r for 24 hour activity}
-activity_24 = join_df |>
+activity_24_plot = join_df |>
   ggplot(aes(x = min, y = mims, group = seqn, color = sex)) +
   geom_line(alpha = .2) +
   geom_smooth(aes(group = sex), se = FALSE) +
-  facet_wrap(. ~ education, ncol = 3) +
+  facet_grid(. ~ education) +
   labs(
     title = "Daily Activity Trends by Education level",
     x = "Time (minutes)",
     y = "Avtivity",
   ) 
+
 ```
 
+```{r showing the plot}
+activity_24_plot
+```
 
+The `activity_24_plot` is divided into three panels, each representing an education level: `high school equivalent`, `less than high school`, and `more than high school`. Each panel presents the daily activity trends over time (in minutes), separated by sex as indicated by the colors: `female` (pink) and `male` (blue).
+Observation from the data:
+The activity data for both sexes appears noisy, with many small peaks and troughs, suggesting that there's considerable variation in activity minute-by-minute.
+There are smooth trend lines for both males and females in each education category, which help summarize the overall trend amidst the noise.
 
+For `High School Equivalent`: The activity level seems moderate for both sexes. Activity levels for females seem slightly lower than for males, especially in the earlier time segments.
+Fo `Less Than High School`: The overall activity level appears similar to the high school equivalent group, with females again showing slightly lower activity than males.
+For `More Than High School`: There's a notable increase in activity for both sexes, especially around the 1000-minute mark. Activity levels for males seem to peak more significantly than for females.
 
-
-
+In all education levels, `males` generally have higher or equal activity levels compared to `females`, as indicated by the blue trend line consistently being above or near the red one.
+The difference between `male` and `female` activity is most pronounced in the `more than high school` category, especially in the latter half of the day.
 
