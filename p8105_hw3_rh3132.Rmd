@@ -25,5 +25,57 @@ knitr::opts_chunk$set(
 library(p8105.datasets)
 data("instacart")
 ```
+The `instacart` dataset contains `r nrow(instacart)` observations and `n nol(instacart` variables.
+Each row represent one product from the instacart order, which contains other information about the product, product id, name, user id, order number, aisle, department id, department and the purchase related information such as if the item is reordered, order hour of the day, day since prior order, and add to cart order. 
+
+```{r number of aisles, and the aisles are the most items ordered from}
+instacart |> 
+  group_by(aisle) |> 
+  summarize(n_obs = n()) |> 
+  arrange (desc(n_obs))
+```
+There are 134 aisles, and `Fresh vegetables` is the most items customers ordered from.
+
+```{r plotting}
+instacart |>
+  count(aisle) |> 
+  filter(n > 10000) |> 
+  mutate(aisle = fct_reorder(aisle, n)) |> 
+  ggplot(aes(x = aisle, y = n)) + 
+  geom_point() + 
+  labs(title = "Number of items ordered in each aisle") +
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))
+```
+From this plot, fresh vegetables and fresh fruits are the most ordered items.
+
+```{r table showing 3 most popular items}
+instacart |> 
+  filter(aisle %in% c("baking ingredients", "dog food care", "packaged vegetables fruits")) |>
+  group_by(aisle) |> 
+  count(product_name) |> 
+  mutate(
+    rank = min_rank(desc(n))) |> 
+  filter(rank <= 3) |> 
+  arrange(desc(n)) |>
+  knitr::kable()
+```
+From `packaged vegetables fruits`, the 3 most popular items are organic baby spinach, organic rasberries, organic blueberries, and from baking ingredients, light brown sugar, pure baking soda and cane sugar are the 3 most popular items. For dog food care, snack sticks chicken & rice recipe dog treats, organix chicken & brown rice recipe and small dog biscuits are the top 3.
+
+```{r table showing the mean hour of the day at which Pink Lady Apples and Coffee Ice Cream}
+instacart |> 
+  filter(
+    product_name == "Pink Lady Apples"|
+    product_name == "Coffee Ice Cream") |> 
+  group_by(product_name, order_dow) |> 
+  summarize(mean_hour = mean(order_hour_of_day)) |> 
+  pivot_wider(
+    names_from = product_name,
+    values_from = mean_hour) |> 
+  knitr::kable(digits = 2)
+```
+
+
+
+
 
 
