@@ -130,6 +130,50 @@ brfss_state2010$state
 The above 14 states `r names(brfss_state2010)` were observed at 7 or more locations in 2010.
 
 
+```{r construct a dataset, limit to excellent response}
+excellent_data <- brfss_clean |>
+  filter(response == "Excellent") |>
+  select(year, state, data_value) |>
+  group_by(year, state) |>
+  summarise(avg_data_value = mean(data_value, na.rm = TRUE) ) |>
+  drop_na ()
+```
+
+```{r making a spaghetti plot}
+ggplot(excellent_data, 
+       aes(x = year, y = avg_data_value, group = state, color = state)) +
+  geom_line () +
+  geom_point () +
+  labs(title = "Average Value of 'Excellent' Responses Over Time by State",
+       x = "Year",
+       y = "Average Value") +
+  theme(legend.position="left")
+```
+
+This is a plot where each state's line depicts how the average "Excellent" response value changes over the years.
+
+```{r finding the data to making two-panel plot}
+ny_data <- brfss_clean |>
+  filter(year %in% c("2006", "2010"),
+         state == "NY",
+         response %in% c("Poor", "Fair", "Good", "Very Good", "Excellent"))
+```
+```{r making the plots}
+ggplot(ny_data, aes(x = data_value, fill = response)) +
+  geom_histogram(
+    binwidth = 1, position = "identity", alpha = 0.5) +
+  labs(title = "Distribution of data_value for responses in NY State",
+       x = "Data Value",
+       y = "Count") +
+  facet_wrap(~year, ncol = 2) +
+  scale_fill_brewer(palette = "Set1") +
+  theme_minimal()
+```
+
+
+
+
+
 
 
 
