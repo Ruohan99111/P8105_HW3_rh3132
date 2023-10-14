@@ -1,0 +1,6 @@
+---
+title: "HW3 document"
+output: github_document
+---
+
+
