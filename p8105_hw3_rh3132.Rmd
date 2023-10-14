@@ -152,22 +152,26 @@ ggplot(excellent_data,
 
 This is a plot where each state's line depicts how the average "Excellent" response value changes over the years.
 
-```{r finding the data to making two-panel plot}
-ny_data <- brfss_clean |>
-  filter(year %in% c("2006", "2010"),
-         state == "NY",
-         response %in% c("Poor", "Fair", "Good", "Very Good", "Excellent"))
+```{r finding the data to making two-panel plot for 2006}
+ny_data_2006 <- brfss_clean |>
+  filter(state == "NY", year == "2006") |>
+  select(year, data_value, response, county)
 ```
-```{r making the plots}
-ggplot(ny_data, aes(x = data_value, fill = response)) +
-  geom_histogram(
-    binwidth = 1, position = "identity", alpha = 0.5) +
-  labs(title = "Distribution of data_value for responses in NY State",
-       x = "Data Value",
-       y = "Count") +
-  facet_wrap(~year, ncol = 2) +
-  scale_fill_brewer(palette = "Set1") +
+This step filter the main dataset to get data specific to: `Years` 2006 , NY state, Responses ranging from "Poor" to "Excellent"
+
+
+```{r making the plot for 2006}
+plot_NY_2006 = ny_data_2006 |>
+  ggplot (aes(x=response, y= data_value)) +
+  geom_boxplot() +
+  labs(
+    x= "response",
+    y= "data value",
+    title= "Plot of Data Value over Responses in 2006 among NY"
+  ) +
+  scale_fill_discrete(name = "county") +
   theme_minimal()
+plot_NY_2006
 ```
 
 
