@@ -25,7 +25,7 @@ knitr::opts_chunk$set(
 library(p8105.datasets)
 data("instacart")
 ```
-The `instacart` dataset contains `r nrow(instacart)` observations and `n nol(instacart)` variables.
+The `instacart` dataset contains `r nrow(instacart)` observations and ``r ncol(instacart)`` variables.
 Each row represent one product from the instacart order, which contains other information about the product, product id, name, user id, order number, aisle, department id, department and the purchase related information such as if the item is reordered, order hour of the day, day since prior order, and add to cart order. 
 
 ```{r number of aisles, and the aisles are the most items ordered from}
@@ -221,6 +221,16 @@ accel_data_clean <- accel_df |>
 For this step, I reshaped the dataset from a wide format to a long format using the pivot_longer() function. specifically, I renamed these columns to a single column named "min".
 which the corresponding values from these columns are stored in a new column named "mims". And I converted the min column (which stores the minute values) to a numeric data type.
 
+
+```{r Join dataset}
+join_df = 
+  inner_join(demo_data_clean, accel_data_clean, by = "seqn") |> 
+  arrange(age, bmi) |>
+  drop_na()
+```
+
+This `join_df` dataset contains `r nrow(join_df)` observations and `r ncol(join_df)` variables.
+
 #Produce a reader-friendly table for the number of men and women in each education category, and create a visualization of the age distributions for men and women in each education category.
 
 ```{r table for education and sex }
@@ -244,6 +254,8 @@ For More Than High School: Among those with education surpassing high school lev
 Overall, while there are some discrepancies in male and female counts across educational levels, the differences are not stark. Both genders have substantial representation in all three education categories.
 
 
+
+
 #Visualization of age distributions for men and women in each education category
 ```{r visualization of age distribution}
 demo_data_clean |>
@@ -257,10 +269,13 @@ demo_data_clean |>
        x = "Education",
        y = "Age") 
 ```
+The boxplot effectively highlights the central tendencies and spreads of the age distributions. The side-by-side comparison allows for easy visual interpretation of differences across categories.
 
 For the `demo_data_clean` boxplot, both men and women who have 'more than high school' education appear younger on average compared to the other two categories. The median age for this group is lower than that of the other two categories.For those with  `less than high school` education, the age distribution for men and women is quite similar, with both medians hovering around the early 60s.In the `high school equivalent` category, females tend to be slightly older than males on average.
 In the `less than high school` and `more than high school` categories, the age distributions for males and females are closely aligned. The medians are nearly identical, and the overall spread of ages is similar.
 For those with a `high school equivalent` education, there's a slight difference in age distributions between males and females, with females being slightly older on average.
+
+
 
 
 
