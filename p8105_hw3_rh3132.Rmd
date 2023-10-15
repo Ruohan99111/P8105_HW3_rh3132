@@ -36,7 +36,8 @@ instacart |>
 ```
 There are 134 aisles, and `Fresh vegetables` is the most items customers ordered from.
 
-```{r plotting}
+
+```{r plotting instacart}
 instacart |>
   count(aisle) |> 
   filter(n > 10000) |> 
@@ -73,6 +74,7 @@ instacart |>
     values_from = mean_hour) |> 
   knitr::kable(digits = 2)
 ```
+`summarise()` has grouped output by 'product_name'. You can override using the `.groups` argument.
 
 
 ##Problem 2
@@ -115,7 +117,7 @@ brfss_state2002 <- brfss_clean |>
 
 brfss_state2002$state
 ```
-The above 6 states `r names(brfss_state2002)` were observed at 7 or more locations in 2002.
+The above 6 states, "CT" "FL" "MA" "NC" "NJ" "PA",  `r names(brfss_state2002)` were observed at 7 or more locations in 2002.
 
 
 ```{r for 2010}
@@ -127,7 +129,7 @@ brfss_state2010 <- brfss_clean |>
 
 brfss_state2010$state
 ```
-The above 14 states `r names(brfss_state2010)` were observed at 7 or more locations in 2010.
+The above 14 states, "CA" "CO" "FL" "MA" "MD" "NC" "NE" "NJ" "NY" "OH" "PA" "SC" "TX" "WA", `r names(brfss_state2010)` were observed at 7 or more locations in 2010.
 
 
 ```{r construct a dataset, limit to excellent response}
@@ -138,6 +140,7 @@ excellent_data <- brfss_clean |>
   summarise(avg_data_value = mean(data_value, na.rm = TRUE) ) |>
   drop_na ()
 ```
+`summarise()` has grouped output by 'year'. You can override using the `.groups` argument.
 
 ```{r making a spaghetti plot}
 ggplot(excellent_data, 
@@ -149,8 +152,8 @@ ggplot(excellent_data,
        y = "Average Value") +
   theme(legend.position="left")
 ```
-
 This is a plot where each state's line depicts how the average "Excellent" response value changes over the years.
+
 
 ```{r finding the data to making two-panel plot for 2006 and 2010}
 ny_data = brfss_clean |>
@@ -171,6 +174,7 @@ ny_data |>
   geom_point(aes(color = county)) + 
   facet_grid(. ~ year) + 
   labs(title = "Plot of Data Value over Responses among NY, 2006 vs.2010")
+
 print(ny_data)
 ```
 For the respondents who categorized their experiences as "poor", the spread of data values was relatively narrow in both years, with the majority of counties reflecting averages below 5 in this category. Conversely, the "good" and "very good" categories drew the highest number of responses in both 2006 and 2010. While in 2006 the distribution of values between these two categories appeared quite balanced, by 2010 there was a noticeable tilt, with "very good" registering evidently higher data values compared to the "good" category.
@@ -222,7 +226,7 @@ For this step, I reshaped the dataset from a wide format to a long format using 
 which the corresponding values from these columns are stored in a new column named "mims". And I converted the min column (which stores the minute values) to a numeric data type.
 
 
-```{r Join dataset}
+```{r Join datasets}
 join_df = 
   inner_join(demo_data_clean, accel_data_clean, by = "seqn") |> 
   arrange(age, bmi) |>
@@ -323,7 +327,7 @@ activity_24_plot = join_df |>
 
 ```
 
-```{r showing the plot}
+```{r showing the plot of activity_24}
 activity_24_plot
 ```
 
